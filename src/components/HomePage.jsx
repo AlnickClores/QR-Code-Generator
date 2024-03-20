@@ -61,7 +61,7 @@ function Home() {
   return (
     <>
       <form
-        className="flex flex-col justify-center items-center"
+        className="flex flex-col justify-center items-center h-screen"
         onSubmit={generateQr}
       >
         <h1 className="text-3xl py-5 font-bold sm:text-5xl">
