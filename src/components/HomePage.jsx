@@ -1,5 +1,6 @@
 import { useState } from "react";
 import FormInput from "./Form";
+import Loader from "./loader";
 import qrImage from "../assets/qr-code.png";
 
 function Home() {
@@ -76,7 +77,7 @@ function Home() {
             <path d="M12 21v-1" />
           </svg>
         </div>
-        <h1 className="text-5xl font-bold">Scanify</h1>
+        <h1 className="text-5xl font-bold">Qrafty</h1>
         <p className="text-sm text-slate-700 max-w-xs">
           Create custom QR codes instantly. Enter any URL, text, or data to
           generate your QR code.
@@ -84,9 +85,7 @@ function Home() {
       </div>
       <div className="p-10 border bg-blue-50 border-slate-300 rounded-lg mt-10 mb-5 shadow-lg">
         {isLoading ? (
-          <div className="flex items-center justify-center h-72">
-            <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
-          </div>
+          <Loader />
         ) : (
           <img
             className="bg-white p-5 rounded-lg shadow-xl m-auto"
