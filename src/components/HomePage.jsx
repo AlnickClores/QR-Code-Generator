@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "./SubmitButton";
 import Input from "./TextInput";
-import Footer from "./Footer";
 import { quantum } from "ldrs";
 
 quantum.register();
