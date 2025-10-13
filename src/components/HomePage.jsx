@@ -35,6 +35,17 @@ function Home() {
     }, 500);
   };
 
+  const downloadQrCode = () => {
+    if (!qrCode) return;
+
+    const link = document.createElement("a");
+    link.href = qrCode;
+    link.download = "qrcode.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <>
       <div className="flex flex-col items-center text-center gap-2">
@@ -91,7 +102,10 @@ function Home() {
         onGenerateQrCode={generateQrCode}
       />
 
-      <button className="flex gap-2 items-center justify-center font-semibold text-slate-700 border border-slate-300 rounded-lg px-4 py-2 mt-5 w-full hover:bg-blue-50 transition-colors duration-300 ease-in-out">
+      <button
+        onClick={downloadQrCode}
+        className="flex gap-2 items-center justify-center font-semibold text-slate-700 border border-slate-300 rounded-lg px-4 py-2 mt-5 w-full hover:bg-blue-50 transition-colors duration-300 ease-in-out"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="18"
@@ -99,10 +113,10 @@ function Home() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="lucide lucide-download-icon lucide-download"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="lucide lucide-download-icon lucide-download"
         >
           <path d="M12 15V3" />
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
