@@ -1,86 +1,119 @@
-import { useState, useEffect } from "react";
-import Button from "./SubmitButton";
-import Input from "./TextInput";
-import { quantum } from "ldrs";
-
-quantum.register();
+import { useState } from "react";
+import FormInput from "./Form";
+import qrImage from "../assets/qr-code.png";
 
 function Home() {
-  const [qr, setQr] = useState("");
-  const [input, setInput] = useState("");
-  const [loader, setLoader] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [qrCode, setQrCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    generateDefaultQr();
-  }, []);
-
-  const generateDefaultQr = async () => {
-    try {
-      const res = await fetch(
-        `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://alnickclores.github.io/alnickcloresdev/src/index.html`
-      );
-      if (res.ok) {
-        const data = await res.blob();
-        const url = URL.createObjectURL(data);
-        setQr(url);
-      } else {
-        console.log("Failed to generate default QR code");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
   };
 
-  const generateQr = async (e) => {
+  const generateQrCode = async (e) => {
     e.preventDefault();
-    setLoader(true);
+    setIsLoading(true);
 
     setTimeout(async () => {
       try {
         const res = await fetch(
-          `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${input}`
+          `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${inputValue}`
         );
+
         if (res.ok) {
           const data = await res.blob();
-          const url = URL.createObjectURL(data);
-          setQr(url);
-          setInput("");
-          setLoader(false);
-        } else {
-          console.log("Failed to generate QR code");
-          setLoader(false);
+          const imageUrl = URL.createObjectURL(data);
+          setQrCode(imageUrl);
+          setInputValue("");
+          setIsLoading(false);
         }
       } catch (error) {
-        console.log(error);
-        setLoader(false);
+        console.error("Error generating QR code:", error);
+        setIsLoading(false);
       }
-    }, 2500);
+    }, 500);
   };
 
   return (
     <>
-      <form
-        className="flex flex-col justify-center items-center h-screen"
-        onSubmit={generateQr}
-      >
-        <h1 className="text-3xl py-5 font-bold sm:text-5xl">
-          QR Code Generator
-        </h1>
-        <div className="my-20 flex flex-col justify-center items-center">
-          {loader ? (
-            <l-quantum size="55" speed="1.8" color="#86efac"></l-quantum>
-          ) : (
-            <>
-              {qr && <img src={qr} alt="QR code" />}
-              <h1 className="text-center mt-5 text-2xl tracking-[2px] uppercase font-bold">
-                Scan Me
-              </h1>
-            </>
-          )}
+      <div className="flex flex-col items-center text-center gap-2">
+        <div className="m-auto bg-blue-50 p-3 rounded-xl">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="40"
+            height="40"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="lucide lucide-qr-code-icon lucide-qr-code text-blue-500"
+          >
+            <rect width="5" height="5" x="3" y="3" rx="1" />
+            <rect width="5" height="5" x="16" y="3" rx="1" />
+            <rect width="5" height="5" x="3" y="16" rx="1" />
+            <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
+            <path d="M21 21v.01" />
+            <path d="M12 7v3a2 2 0 0 1-2 2H7" />
+            <path d="M3 12h.01" />
+            <path d="M12 3h.01" />
+            <path d="M12 16v.01" />
+            <path d="M16 12h1" />
+            <path d="M21 12v.01" />
+            <path d="M12 21v-1" />
+          </svg>
         </div>
-        <Input setInput={setInput} input={input} />
-        <Button />
-      </form>
+        <h1 className="text-5xl font-bold">Scanify</h1>
+        <p className="text-sm text-slate-700 max-w-xs">
+          Create custom QR codes instantly. Enter any URL, text, or data to
+          generate your QR code.
+        </p>
+      </div>
+      <div className="p-10 border bg-blue-50 border-slate-300 rounded-lg mt-10 mb-5 shadow-lg">
+        {isLoading ? (
+          <div className="flex items-center justify-center h-72">
+            <div className="w-12 h-12 border-4 border-blue-400 border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <img
+            className="bg-white p-5 rounded-lg shadow-xl m-auto"
+            src={qrCode ? qrCode : qrImage}
+            alt="QR Code"
+          />
+        )}
+      </div>
+
+      <FormInput
+        inputValue={inputValue}
+        onInputChange={handleInputChange}
+        onGenerateQrCode={generateQrCode}
+      />
+
+      <button className="flex gap-2 items-center justify-center font-semibold text-slate-700 border border-slate-300 rounded-lg px-4 py-2 mt-5 w-full hover:bg-blue-50 transition-colors duration-300 ease-in-out">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="lucide lucide-download-icon lucide-download"
+        >
+          <path d="M12 15V3" />
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <path d="m7 10 5 5 5-5" />
+        </svg>{" "}
+        <p>Download QR Code</p>
+      </button>
+
+      <p className="text-sm text-slate-700 text-center text-pretty mt-10">
+        QR codes are generated instantly and never stored on any server.
+      </p>
     </>
   );
 }

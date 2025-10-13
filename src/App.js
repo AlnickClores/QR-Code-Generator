@@ -1,13 +1,9 @@
 import Home from "./components/HomePage";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
 function App() {
   return (
-    <div className="flex flex-col justify-center mx-auto max-w-[768px]">
-      <Navbar />
+    <div className="flex flex-col justify-center m-auto max-w-lg px-5 py-10 md:py-20 lg:py-25">
       <Home />
-      <Footer />
     </div>
   );
 }
